@@ -7,7 +7,7 @@ function HomePage(props) {
             <div className='home-header'>
                 <h1>Your Favorite Food, Delivered While Coding</h1>
                 <Link to='/pizza'>
-                    <button>Pizza</button>
+                    <button id= 'order-pizza'>Pizza</button>
                 </Link>
             </div>
             

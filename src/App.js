@@ -1,14 +1,71 @@
 import React from "react";
 import OrderForm from "./components/OrderForm.js";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, Link } from "react-router-dom";
 import HomePage from "./HomePage";
+import axios from "axios";
+import schema from "./components/formSchema.js";
+import { useState } from 'react'
+import { reach } from 'yup'
+
+
+
+const initialFormValues = {
+  name:''
+
+}
+
+const initialFormErrors = {
+  name: ''
+}
+
+
+
+
 
 const App = () => {
+  const [pizza, setPizza] = useState('')
+  const [formValues, setFormValues] = useState(initialFormValues)
+  const [formErrors, setFormErrors] = useState(initialFormErrors)
+
+
+  const validate = (name, value) => {
+    reach(schema, name)
+      .validate(value)
+      .then(()=>setFormErrors({...formErrors, [name]: ''}))
+      .catch(err => setFormErrors({...formErrors, [name]: err.errors[0]}))
+  }
+
+  const postNewPizza = newPizza => {
+    axios.post('https://reqres.in/api/orders', newPizza)
+    .then(res =>{
+      setPizza(res.data)
+    })
+    .catch(err =>{
+      console.log(err)
+    })
+  }
+
+  const inputChange = (name, value) =>{
+    validate(name, value)
+    setFormValues({
+      ...formValues, [name]: value
+    })
+  }
+
+  const formSubmit = () =>{
+    const newPizza = {
+      name: formValues.name.trim()
+    }
+    postNewPizza(newPizza)
+  }
+
   return (
     <div className='header'>
       <h1>Lambda Eats</h1>
       <div>
-        <button>Home</button>
+        <Link to='/pizza'>
+          <button>Home</button>
+        </Link>
         <button>Help</button>
       </div>
       
@@ -18,7 +75,11 @@ const App = () => {
     </Route>
     
     <Route path='/pizza'>
-      <OrderForm/>
+      <OrderForm
+      errors={formErrors}
+      change={inputChange}
+      submit={formSubmit}
+      />
     </Route>
   </Switch> 
 
