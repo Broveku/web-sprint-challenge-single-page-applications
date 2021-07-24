@@ -1,8 +1,8 @@
 
 
-const nameInput = () => cy.get('input[id="name-input"]')
+const nameInput = () => cy.get('input[name="name"]')
 const toppingInput = () => cy.get('input[type="checkbox"]')
-const pizzaBtn = () => cy.get('button[id="order-pizza"]')
+const pizzaBtn = () => cy.get('input[type="submit"]')
 
 
 describe('Pizza App', ()=>{
@@ -16,10 +16,12 @@ describe('Pizza App', ()=>{
             .should('have.value', '')
             .type('Jordan Gearheart')
             .should('have.value', 'Jordan Gearheart')
+        
         toppingInput()
-            .should('have.value', false)
-            .check()
-            .should('have.value', true)
+            .check({multiple:true})
+        
+        pizzaBtn()
+            .click()
 
     })
 

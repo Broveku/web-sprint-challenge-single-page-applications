@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 
 
-function OrderForm({errors, change, submit}) {
+
+
+function OrderForm({ postNewOrder,addToPizza, errors, change, submit}) {
 
     const [formData, setFormData] = useState({
         name: '', 
@@ -44,14 +46,42 @@ function OrderForm({errors, change, submit}) {
 // console.log(formData)
 
 
+    const onSubmit = (evt)=>{
+        evt.preventDefault()
+        const {name, size, sauce, special, topping1, topping2, topping3, topping4, topping5, topping6, topping7, topping8, topping9, topping10, topping11, topping12, topping13, topping14  } = formData
+        let newPizza = {name, size, sauce, special, topping1, topping2, topping3, topping4, topping5, topping6, topping7, topping8, topping9, topping10, topping11, topping12, topping13, topping14 }
+        addToPizza(newPizza)
+        postNewOrder(newPizza)
+        console.log(newPizza)
+        setFormData({
+            name: '', 
+            size: '',
+            sauce:'',
+            special: '',
+            topping1: false,
+            topping2: false,
+            topping3: false,
+            topping4: false,
+            topping5: false,
+            topping6: false,
+            topping7: false,
+            topping8: false,
+            topping9: false,
+            topping10: false,
+            topping11: false,
+            topping12: false,
+            topping13: false,
+            topping14: false,
+              
+        })
+        submit()
+        
+
+    }
+
     return (
     <>
-    <form id='pizza-form' onSubmit={(evt) =>{
-        evt.preventDefault()
-
-        
-        submit()
-    }}>
+    <form id='pizza-form' onSubmit={onSubmit}>
         <div>
             <h2>Build Your Own Pizza</h2>
             <label>Name:
@@ -71,16 +101,16 @@ function OrderForm({errors, change, submit}) {
         <h3>Choice of Sauce</h3>
             <div className='sauces'>
                 <label>
-                    <input type='radio' id='originalRed' name='sauce' value='originalRed'/> Original Red
+                    <input type='radio' id='originalRed' name='sauce' value='Original Red' onChange={handleInput}/> Original Red
                 </label>
                 <label>
-                    <input type='radio' id='garlicRanch' name='sauce' value='garlicRanch'/> Garlic Ranch
+                    <input type='radio' id='garlicRanch' name='sauce' value='Garlic Ranch' onChange={handleInput}/> Garlic Ranch
                  </label>
                  <label>
-                    <input type='radio' id='BBQ' name='sauce' value='BBQ'/> BBQ Sauce
+                    <input type='radio' id='BBQ' name='sauce' value='BBQ' onChange={handleInput}/> BBQ Sauce
                 </label>
                 <label>
-                    <input type='radio' id='spinachAlfredo' name='sauce' value='spinachAlfredo'/> Spinach Alfredo
+                    <input type='radio' id='spinachAlfredo' name='sauce' value='Spinach Alfredo' onChange={handleInput}/> Spinach Alfredo
                 </label>
             </div>
         <h3>Add Toppings</h3>
@@ -125,7 +155,8 @@ function OrderForm({errors, change, submit}) {
             <input type='text' 
             id='special-text' 
             name='special'
-            placeholder='Anything else?'/>
+            placeholder='Anything else?'
+            onChange={handleInput}/>
         </div>
         <button id="order-button">Add to Order</button>
     </form>

@@ -9,6 +9,7 @@ import { reach } from 'yup'
 
 
 
+
 const initialFormValues = {
   name:''
 
@@ -27,6 +28,9 @@ const App = () => {
   const [formValues, setFormValues] = useState(initialFormValues)
   const [formErrors, setFormErrors] = useState(initialFormErrors)
 
+  const addToPizza = newPizza =>{
+    setPizza([newPizza, pizza])
+  }
 
   const validate = (name, value) => {
     reach(schema, name)
@@ -35,8 +39,8 @@ const App = () => {
       .catch(err => setFormErrors({...formErrors, [name]: err.errors[0]}))
   }
 
-  const postNewPizza = newPizza => {
-    axios.post('https://reqres.in/api/orders', newPizza)
+  const postNewOrder = newOrder => {
+    axios.post('https://reqres.in/api/orders', newOrder)
     .then(res =>{
       setPizza(res.data)
     })
@@ -54,9 +58,11 @@ const App = () => {
 
   const formSubmit = () =>{
     const newPizza = {
-      name: formValues.name.trim()
+      name: formValues.name.trim(),
+
+
     }
-    postNewPizza(newPizza)
+    postNewOrder(newPizza)
   }
 
   return (
@@ -76,6 +82,8 @@ const App = () => {
     
     <Route path='/pizza'>
       <OrderForm
+      postNewOrder={postNewOrder}
+      addToPizza={addToPizza}
       errors={formErrors}
       change={inputChange}
       submit={formSubmit}
